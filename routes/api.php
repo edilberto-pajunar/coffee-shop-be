@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Feed\FeedController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +13,12 @@ Route::post("login", [AuthenticationController::class, "login"]);
 
 
 Route::get("users", [UserController::class, "index"]);
+
+// products
+Route::prefix("products")->group(function () {
+    Route::get("", [ProductController::class, "index"]);
+    Route::get("categories/{id}", [ProductController::class, "show"]);
+});
 
 
 // Route::post("v1/register", [UserController::class, "register"]);
