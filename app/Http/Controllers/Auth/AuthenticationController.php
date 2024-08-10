@@ -2,52 +2,72 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthenticationController extends Controller
 {
     public function register(RegisterRequest $request) {
-        $request->validated();
+        try {
+            $request->validated();
 
-        $userData = [
-            "name" => $request->name,
-            "username" => $request->username,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
-        ];
+            $userData = [
+                "username" => $request->username,
+                "email" => $request->email,
+                "password" => Hash::make($request->password),
+            ];
+    
+            $user = User::create($userData);
+            $token = $user->createToken("auth_token")->plainTextToken;
+    
+            $data = [
+                "message" =>"Created Sucesssfully",
+                "token" => $token,
+            ];
+    
+            return response()->json($data, 200);
+        } catch ( Exception $e) {
+            return response()->json([
+                "status" => "error",
+                "message" => $e->getMessage(),
+            ], 500);
+        }
 
-        $user = User::create($userData);
-        $token = $user->createToken("forumapp")->plainTextToken;
-
-        return response([
-            "message" =>"Created Sucesssfully",
-            "user" => $user,
-            "token" => $token
-        ], 201);
+       
     }
 
     public function login(LoginRequest $request) {
-        $request->validated();
 
-        $user = User::whereUsername($request->username)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        try {
+            $request->validated();
+
+            if (!Auth::attempt($request->only(["email", "password"]))) {
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Email & Password does not match with our record",
+                ], 401);
+            }
+
+
+            $user = User::where("email", $request->email)->first();
+            
+            $data = [
+                "status" => "success",
+                "message" => "User Logged in Successfully",
+                "token" => $user->createToken("auth_token")->plainTextToken,
+            ];
+    
+            return response()->json($data, 200);
+        } catch (Exception $e) {
             return response([
-                "message" => "Invalid credentials",
-            ], 422);
+                "message" => $e->getMessage(),
+            ], 500);
         }
-        
-        $token = $user->createToken("forumapp")->plainTextToken;
-        return response([
-            "user" => $user,
-            "token" => $token
-        ], 200);
-
-        
     }
 }
