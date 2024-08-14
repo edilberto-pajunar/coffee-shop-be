@@ -3,15 +3,25 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Exception;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
     public function index() {
-        return Product::all();
+        $products = Product::with("category")->get();
+
+        $products->makeHidden("category_id");
+
+        return response()->json([
+            "status" => "success",
+            "data" => $products,
+        ], 200);
     }
 
     public function show($id) {
@@ -30,4 +40,12 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function store(Request $request) : JsonResponse {
+        try {
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
+    }
+
 }

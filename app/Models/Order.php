@@ -7,31 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Product extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "title",
-        "description",
-        "price",
-        "popular",
-        "category_id",
-        "oz"
+        "user_id",
+        "order_number",
+        "total_amount",
+        "status",
     ];
 
-    protected $casts = [
-        "oz" => "array",
-        "popular" => "boolean",
-        "price" => "float",
-        
+    protected $dates = [
+        "created_at",
+        "updated_at",
     ];
 
-    public function category(): BelongsTo {
-        return $this->belongsTo(Category::class);
+    public function user() : BelongsTo {
+        return $this->belongsTo(User::class);
     }
 
     public function orderItems() : HasMany {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function products() : HasMany {
         return $this->hasMany(OrderItem::class);
     }
 }
