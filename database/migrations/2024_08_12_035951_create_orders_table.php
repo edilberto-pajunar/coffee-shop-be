@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("order_number")->unique();
             $table->decimal("total_amount", 10, 2);
-            $table->enum("status", ["pending", "completed", "shipped", "cancelled"])->default("pending");
+            $table->enum("status", ["pending", "unpaid", "completed", "shipped", "cancelled"])->default("pending");
 
             $table->foreignId("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();

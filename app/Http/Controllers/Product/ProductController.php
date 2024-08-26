@@ -48,4 +48,18 @@ class ProductController extends Controller
         }
     }
 
+    public function search(Request $request) {
+        try {
+            $name =$request->input("name");
+            $products = Product::where('title', 'like', '%' . $name . '%')->get();
+
+            return response()->json([
+                "status" => "success",
+                "data" => $products ?? [],
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
+    }
+
 }
