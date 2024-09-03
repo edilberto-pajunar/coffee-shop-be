@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,8 @@ Route::group([
     "middleware" => ["auth:sanctum"]
 ], function() {
     Route::get("", [StoreController::class, "index"]);
+    Route::get("stream", [StoreController::class, "stream"]);
+    Route::post("store", [StoreController::class, "store"]);
 });
 
 Route::group([
@@ -63,3 +66,11 @@ Route::group([
     Route::get("", [PaymentController::class, "index"]);
     Route::post("/generate_qr", [PaymentController::class, "generateQrCode"]);
 }); 
+
+Route::group([
+    "prefix" => "wallet",
+    "middleware" => ["auth:sanctum"]
+], function() {
+    Route::get("", [WalletController::class, "userWallet"]);
+    Route::post("/add_balance", [WalletController::class, "store"]);
+});

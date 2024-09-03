@@ -10,7 +10,7 @@ class PaymentController extends Controller
     //
 
     public function generateQrCode(Request $request) {
-        $uri = "https://pg-sandbox.paymaya.com/payments/v1/qr/payments";
+        $uri = "https://pg-sandbox.paymaya.com/payby/v2/paymaya/payments";
         $username = "pk-rpwb5YR6EfnKiMsldZqY4hgpvJjuy8hhxW2bVAAiz2N";
         $body = [
             "totalAmount" => [
@@ -18,9 +18,9 @@ class PaymentController extends Controller
                 "currency" => "PHP",
             ],
             "redirectUrl" => [
-                "success" => "www.youtube.com",
-                "failure" => "www.facebook.com",
-                "cancel" => "www.twitter.com"
+                "success" => "http://127.0.0.1:8000/success",
+                "failure" => "http://127.0.0.1:8000/failed",
+                "cancel" => "http://127.0.0.1:8000/cancelled"
             ],
             "requestReferenceNumber" => "1",
             "metadata" => [
@@ -51,7 +51,5 @@ class PaymentController extends Controller
                 "data" => $data,
             ], $response->status());
         }
-
-
     }
 }
