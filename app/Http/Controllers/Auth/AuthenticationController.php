@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Clue\Redis\Protocol\Model\Request;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -65,6 +66,24 @@ class AuthenticationController extends Controller
             return response()->json($data, 200);
         } catch (Exception $e) {
             return response([
+                "message" => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function logout() {
+        try {
+            Auth::user()->tokens()->delete();
+
+            return response()->json([
+                "status" => "success",
+                "message" => "User Logged out Successfully",
+            ]);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                "status" => "error",
                 "message" => $e->getMessage(),
             ], 500);
         }

@@ -59,11 +59,12 @@ class OrderController extends Controller
             ->exists();
 
         if ($hasPendingOrders) {
-            $validator->after(function ($validator) {
-                $validator->errors()->add("order", "You cannot place a new order until all pending orders are resolved.");
-            });
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You cannot place a new order until all pending orders are resolved.'
+            ], 400);
         }
-
+        
         if ($validator->fails()) {
             return response()->json([
                 "status" => "error",

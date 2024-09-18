@@ -45,26 +45,21 @@ class UserController extends Controller
             ];
             return response()->json($data, 422);
         }
-        // try {
-            
+    }
 
-        //     $user = new User();
-        //     $user->email = $request->email;
-        //     $user->password = $request->password;
-    
-        //     $user->save();
-        //     $data = [
-        //         "response" => 200,
-        //         "message" => "Created successfuly!"
-        //     ];
-    
-        //     return response()->json($data, 200);
-        // } catch(Exception $e) {
-        //     $data = [
-        //         "response" => 500,
-        //         "message" => "Server error!" . $e->getMessage(),
-        //     ];
-        //     return(response()->json($data, 500));
-        // }
+    public function info(Request $request) {
+        try {
+            $user = User::where("id", $request->id)->first();
+            return response()->json([
+                "status" => "success",
+                "data" => $user,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "status" => "error",
+                "message" => $e->getMessage(),
+            ], 500);
+
+        }
     }
 }

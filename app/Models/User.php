@@ -16,9 +16,18 @@ class User extends Authenticatable
         "username",
         "email",
         "password",
+        "mobile_number",
     ];
 
     public function orders() : HasMany {
         return $this->hasMany(Order::class);
+    }
+
+    public function transactions() : HasMany {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function carts() : HasMany {
+        return $this->hasMany(Cart::class);
     }
 }
