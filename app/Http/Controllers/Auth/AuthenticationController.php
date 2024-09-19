@@ -21,6 +21,7 @@ class AuthenticationController extends Controller
                 "username" => $request->username,
                 "email" => $request->email,
                 "password" => Hash::make($request->password),
+                "is_admin" => $request->is_admin,
             ];
     
             $user = User::create($userData);

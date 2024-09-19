@@ -17,7 +17,13 @@ class User extends Authenticatable
         "email",
         "password",
         "mobile_number",
+        "is_admin",
     ];
+
+    protected $casts = [
+        "is_admin" => "boolean",
+    ];
+
 
     public function orders() : HasMany {
         return $this->hasMany(Order::class);

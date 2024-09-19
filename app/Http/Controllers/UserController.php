@@ -21,8 +21,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function checkToken(Request $request)
-    {
+    public function checkToken(Request $request) {
         // If the user is authenticated, the token is valid
         if (Auth::check()) {
             return response()->json(['message' => 'Token is valid'], 200);
@@ -49,7 +48,9 @@ class UserController extends Controller
 
     public function info(Request $request) {
         try {
-            $user = User::where("id", $request->id)->first();
+            $auth = Auth::user();
+            $user = User::where("id", $auth->id)->first();
+            
             return response()->json([
                 "status" => "success",
                 "data" => $user,

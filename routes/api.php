@@ -28,7 +28,7 @@ Route::group([
     Route::get("", [UserController::class, "index"]);
     Route::get("token-check", [UserController::class, "checkToken"]);
     Route::get("transactions", [TransactionController::class, "show"]);
-    Route::get("{id}", [UserController::class, "info"]);
+    Route::get("info", [UserController::class, "info"]);
 });
 
 Route::group([
