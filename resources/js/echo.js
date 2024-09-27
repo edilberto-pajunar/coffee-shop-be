@@ -12,3 +12,8 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
+
+Echo.private(`App.Models.User.${id}`)
+.listen('testingChannel', (e) => {
+    console.log(e.order);
+});
